@@ -155,11 +155,42 @@
 
 </div>
 <script>
+  const toasts = document.querySelectorAll('.notification-toast');
+  const showcases = document.querySelectorAll('.showcase');
+
+  function isInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    return rect.top < window.innerHeight && rect.bottom > 0;
+  }
+
+  function updateToasts() {
+    let toastShown = false;
+
+    showcases.forEach((section, index) => {
+      if (!toastShown && isInViewport(section)) {
+        toasts.forEach(toast => toast.style.display = 'none');
+        if (toasts[index]) {
+          toasts[index].style.display = 'flex'; // or block if your layout prefers
+          toastShown = true;
+        }
+      }
+    });
+
+    if (!toastShown) {
+      toasts.forEach(toast => toast.style.display = 'none');
+    }
+  }
+
+  // Attach scroll and load events
+  window.addEventListener('scroll', updateToasts);
+  window.addEventListener('load', updateToasts);
+
+  // Close button logic stays
   document.querySelectorAll('[data-toast-close]').forEach(button => {
-  button.addEventListener('click', () => {
-    button.closest('.notification-toast').style.display = 'none';
+    button.addEventListener('click', () => {
+      button.closest('.notification-toast').style.display = 'none';
+    });
   });
-});
 </script>
 
 
