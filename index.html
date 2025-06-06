@@ -2181,7 +2181,8 @@
                       </div>
                       <div class="showcase-status-bar"></div>
                     </div>
-          
+                    <div id="delivery-msg" style="font-size: 16px; font-weight: 500;"></div>
+                    <div id="delivery-timer" style="font-size: 14px; color: #555;"></div>
                     <div class="countdown-box">
                       <p class="countdown-desc">Hurry Up! Offer ends in:</p>
                       <div class="countdown">
@@ -3125,39 +3126,82 @@
   }
 </script>
 <script>
-  // 🔒 Fixed Start and End Time (set once, applies globally)
-  const startDate = new Date("2025-06-06T00:00:00+05:30");
-  const endDate = new Date("2025-06-10T23:59:59+05:30");
+  const slotSchedule = [
+    { name: "Morning Slot", start: "07:00", end: "08:30" },
+    { name: "Noon Slot", start: "12:30", end: "13:15" },
+    { name: "Evening Slot", start: "16:15", end: "18:30" },
+  ];
 
-  function updateCountdown() {
+  function getNextSlot(now) {
+    const today = now.toISOString().split("T")[0]; // YYYY-MM-DD
+    const nowMinutes = now.getHours() * 60 + now.getMinutes();
+
+    for (let i = 0; i < slotSchedule.length; i++) {
+      const slotStart = slotSchedule[i].start.split(":");
+      const slotEnd = slotSchedule[i].end.split(":");
+
+      const startMinutes = parseInt(slotStart[0]) * 60 + parseInt(slotStart[1]);
+      const endMinutes = parseInt(slotEnd[0]) * 60 + parseInt(slotEnd[1]);
+
+      if (nowMinutes >= startMinutes && nowMinutes <= endMinutes) {
+        // Return next slot
+        const nextIndex = (i + 1 < slotSchedule.length) ? i + 1 : 0;
+        const deliveryDayOffset = (i + 1 < slotSchedule.length) ? 0 : 1;
+
+        return {
+          ...slotSchedule[nextIndex],
+          dayOffset: deliveryDayOffset,
+        };
+      }
+    }
+
+    // If no slot matched, check where the time is and assign next based on that
+    for (let i = 0; i < slotSchedule.length; i++) {
+      const startMinutes = parseInt(slotSchedule[i].start.split(":")[0]) * 60 +
+                           parseInt(slotSchedule[i].start.split(":")[1]);
+      if (nowMinutes < startMinutes) {
+        return { ...slotSchedule[i], dayOffset: 0 };
+      }
+    }
+
+    // Else, return morning slot next day
+    return { ...slotSchedule[0], dayOffset: 1 };
+  }
+
+  function updateDeliveryCountdown() {
     const now = new Date();
-    const diff = endDate - now;
+    const slot = getNextSlot(now);
+
+    // Build target delivery datetime
+    const target = new Date(now);
+    const [h, m] = slot.start.split(":").map(Number);
+    target.setDate(target.getDate() + slot.dayOffset);
+    target.setHours(h, m, 0, 0);
+
+    const diff = target - now;
 
     if (diff <= 0) {
-      document.getElementById("countdown").innerHTML = `<p style="color:red;">Offer expired</p>`;
-      document.getElementById("progress-bar").style.width = "100%";
+      document.getElementById("delivery-msg").textContent = "Delivery window passed.";
       return;
     }
 
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
     const minutes = Math.floor((diff / (1000 * 60)) % 60);
     const seconds = Math.floor((diff / 1000) % 60);
 
-    document.getElementById("days").textContent = String(days).padStart(2, '0');
-    document.getElementById("hours").textContent = String(hours).padStart(2, '0');
-    document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
-    document.getElementById("seconds").textContent = String(seconds).padStart(2, '0');
+    const dayText = slot.dayOffset === 0 ? "Today" : "Tomorrow";
 
-    const total = endDate - startDate;
-    const done = now - startDate;
-    const percent = Math.min(100, (done / total) * 100);
-    document.getElementById("progress-bar").style.width = percent + "%";
+    document.getElementById("delivery-msg").innerHTML =
+      `Order now and get delivery in: <b>${slot.name} (${dayText})</b>`;
+
+    document.getElementById("delivery-timer").innerHTML =
+      `Time left: <b>${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}</b>`;
   }
 
-  setInterval(updateCountdown, 1000);
-  updateCountdown();
+  setInterval(updateDeliveryCountdown, 1000);
+  updateDeliveryCountdown();
 </script>
+
 
 
 </body>
