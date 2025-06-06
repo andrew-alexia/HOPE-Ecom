@@ -2090,7 +2090,7 @@
             <div class="showcase-wrapper has-scrollbar">
           
               <!-- First Showcase Container -->
-              <div class="showcase-container">
+<div class="showcase-container">
   <div class="showcase">
     <div class="showcase-banner">
       <img src="./assets/image/products/premium-notebook.jpg" alt="Premium Notebook" class="showcase-img">
@@ -2129,13 +2129,8 @@
       </div>
 
       <div class="countdown-box">
-        <p class="countdown-desc">Hurry Up! Offer ends in:</p>
-        <div class="countdown" id="countdown">
-          <div class="countdown-content"><p class="display-number" id="days">00</p><p class="display-text">Days</p></div>
-          <div class="countdown-content"><p class="display-number" id="hours">00</p><p class="display-text">Hours</p></div>
-          <div class="countdown-content"><p class="display-number" id="minutes">00</p><p class="display-text">Min</p></div>
-          <div class="countdown-content"><p class="display-number" id="seconds">00</p><p class="display-text">Sec</p></div>
-        </div>
+        <p class="countdown-desc" id="delivery-msg">Calculating delivery time...</p>
+        <p id="delivery-timer" style="font-weight: 500; color: #111;"></p>
       </div>
     </div>
   </div>
@@ -2181,8 +2176,7 @@
                       </div>
                       <div class="showcase-status-bar"></div>
                     </div>
-                    <div id="delivery-msg" style="font-size: 16px; font-weight: 500;"></div>
-                    <div id="delivery-timer" style="font-size: 14px; color: #555;"></div>
+          
                     <div class="countdown-box">
                       <p class="countdown-desc">Hurry Up! Offer ends in:</p>
                       <div class="countdown">
@@ -3133,7 +3127,6 @@
   ];
 
   function getNextSlot(now) {
-    const today = now.toISOString().split("T")[0]; // YYYY-MM-DD
     const nowMinutes = now.getHours() * 60 + now.getMinutes();
 
     for (let i = 0; i < slotSchedule.length; i++) {
@@ -3144,35 +3137,29 @@
       const endMinutes = parseInt(slotEnd[0]) * 60 + parseInt(slotEnd[1]);
 
       if (nowMinutes >= startMinutes && nowMinutes <= endMinutes) {
-        // Return next slot
         const nextIndex = (i + 1 < slotSchedule.length) ? i + 1 : 0;
         const deliveryDayOffset = (i + 1 < slotSchedule.length) ? 0 : 1;
-
         return {
           ...slotSchedule[nextIndex],
-          dayOffset: deliveryDayOffset,
+          dayOffset: deliveryDayOffset
         };
       }
     }
 
-    // If no slot matched, check where the time is and assign next based on that
     for (let i = 0; i < slotSchedule.length; i++) {
       const startMinutes = parseInt(slotSchedule[i].start.split(":")[0]) * 60 +
-                           parseInt(slotSchedule[i].start.split(":")[1]);
+        parseInt(slotSchedule[i].start.split(":")[1]);
       if (nowMinutes < startMinutes) {
         return { ...slotSchedule[i], dayOffset: 0 };
       }
     }
 
-    // Else, return morning slot next day
     return { ...slotSchedule[0], dayOffset: 1 };
   }
 
   function updateDeliveryCountdown() {
     const now = new Date();
     const slot = getNextSlot(now);
-
-    // Build target delivery datetime
     const target = new Date(now);
     const [h, m] = slot.start.split(":").map(Number);
     target.setDate(target.getDate() + slot.dayOffset);
@@ -3182,6 +3169,7 @@
 
     if (diff <= 0) {
       document.getElementById("delivery-msg").textContent = "Delivery window passed.";
+      document.getElementById("delivery-timer").textContent = "";
       return;
     }
 
@@ -3193,7 +3181,6 @@
 
     document.getElementById("delivery-msg").innerHTML =
       `Order now and get delivery in: <b>${slot.name} (${dayText})</b>`;
-
     document.getElementById("delivery-timer").innerHTML =
       `Time left: <b>${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}</b>`;
   }
@@ -3201,8 +3188,6 @@
   setInterval(updateDeliveryCountdown, 1000);
   updateDeliveryCountdown();
 </script>
-
-
 
 </body>
 
