@@ -2177,12 +2177,13 @@
       </div>
 
       <div class="countdown-box">
-        <p class="countdown-desc" id="delivery-msg-2">Calculating delivery time...</p>
-        <p id="delivery-timer-2" style="font-weight: 500; color: #111;"></p>
+        <p class="countdown-desc" id="delivery-msg-bulk">Calculating delivery time...</p>
+        <p id="delivery-timer-bulk" style="font-weight: 500; color: #111;"></p>
       </div>
     </div>
   </div>
 </div>
+
 
 
           
@@ -3181,39 +3182,88 @@
 </script>
 
 <script>
-  function updateDeliveryCountdown2() {
-    const now = new Date();
-    const slot = getNextSlot(now);
-    const target = new Date(now);
-    const [h, m] = slot.start.split(":").map(Number);
-    target.setDate(target.getDate() + slot.dayOffset);
-    target.setHours(h, m, 0, 0);
+  const slotSchedule = [
+    { name: "Morning Slot", start: "07:00", end: "08:30" },
+    { name: "Noon Slot", start: "12:30", end: "13:15" },
+    { name: "Evening Slot", start: "16:15", end: "18:30" },
+  ];
 
-    const diff = target - now;
+  function getNextSlot(now) {
+    const nowMinutes = now.getHours() * 60 + now.getMinutes();
 
-    if (diff <= 0) {
-      document.getElementById("delivery-msg-2").textContent = "Delivery window passed.";
-      document.getElementById("delivery-timer-2").textContent = "";
-      return;
+    for (let i = 0; i < slotSchedule.length; i++) {
+      const slotStart = slotSchedule[i].start.split(":");
+      const slotEnd = slotSchedule[i].end.split(":");
+
+      const startMinutes = parseInt(slotStart[0]) * 60 + parseInt(slotStart[1]);
+      const endMinutes = parseInt(slotEnd[0]) * 60 + parseInt(slotEnd[1]);
+
+      if (nowMinutes >= startMinutes && nowMinutes <= endMinutes) {
+        const nextIndex = (i + 1 < slotSchedule.length) ? i + 1 : 0;
+        const deliveryDayOffset = (i + 1 < slotSchedule.length) ? 0 : 1;
+        return {
+          ...slotSchedule[nextIndex],
+          dayOffset: deliveryDayOffset
+        };
+      }
     }
 
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-    const seconds = Math.floor((diff / 1000) % 60);
+    for (let i = 0; i < slotSchedule.length; i++) {
+      const startMinutes = parseInt(slotSchedule[i].start.split(":")[0]) * 60 +
+        parseInt(slotSchedule[i].start.split(":")[1]);
+      if (nowMinutes < startMinutes) {
+        return { ...slotSchedule[i], dayOffset: 0 };
+      }
+    }
 
-    const dayText = slot.dayOffset === 0 ? "Today" : "Tomorrow";
-
-    document.getElementById("delivery-msg-2").innerHTML =
-      `Order now and get delivery in: <b>${slot.name} (${dayText})</b>`;
-
-    document.getElementById("delivery-timer-2").innerHTML =
-      `Time left: <b>${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}</b><br>
-       Delivery starts at: <b>${formatTime(h, m)}</b>`;
+    return { ...slotSchedule[0], dayOffset: 1 };
   }
 
-  setInterval(updateDeliveryCountdown2, 1000);
-  updateDeliveryCountdown2();
+  function formatTime(h, m) {
+    const suffix = h >= 12 ? "PM" : "AM";
+    const hour12 = h % 12 === 0 ? 12 : h % 12;
+    return `${hour12}:${String(m).padStart(2, '0')} ${suffix}`;
+  }
+
+  function setupDeliveryCountdown(msgId, timerId) {
+    function update() {
+      const now = new Date();
+      const slot = getNextSlot(now);
+      const target = new Date(now);
+      const [h, m] = slot.start.split(":").map(Number);
+      target.setDate(target.getDate() + slot.dayOffset);
+      target.setHours(h, m, 0, 0);
+
+      const diff = target - now;
+
+      if (diff <= 0) {
+        document.getElementById(msgId).textContent = "Delivery window passed.";
+        document.getElementById(timerId).textContent = "";
+        return;
+      }
+
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      const dayText = slot.dayOffset === 0 ? "Today" : "Tomorrow";
+
+      document.getElementById(msgId).innerHTML =
+        `Order now and get delivery in: <b>${slot.name} (${dayText})</b>`;
+
+      document.getElementById(timerId).innerHTML =
+        `Time left: <b>${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}</b><br>
+         Delivery starts at: <b>${formatTime(h, m)}</b>`;
+    }
+
+    setInterval(update, 1000);
+    update();
+  }
+
+  // ✅ Call for each product with unique IDs
+  setupDeliveryCountdown("delivery-msg", "delivery-timer"); // For Custom Binding
+  setupDeliveryCountdown("delivery-msg-bulk", "delivery-timer-bulk"); // For Custom Bulk Printout
 </script>
+
 
 </body>
 
