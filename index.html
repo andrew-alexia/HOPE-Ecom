@@ -3125,9 +3125,9 @@
   }
 </script>
 <script>
-  const startDate = new Date(); // now
-  const endDate = new Date();
-  endDate.setDate(startDate.getDate() + 2); // 2 days offer
+  // 🔒 Fixed Start and End Time (set once, applies globally)
+  const startDate = new Date("2025-06-06T00:00:00+05:30");
+  const endDate = new Date("2025-06-10T23:59:59+05:30");
 
   function updateCountdown() {
     const now = new Date();
@@ -3149,7 +3149,6 @@
     document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
     document.getElementById("seconds").textContent = String(seconds).padStart(2, '0');
 
-    // Progress bar logic
     const total = endDate - startDate;
     const done = now - startDate;
     const percent = Math.min(100, (done / total) * 100);
@@ -3157,8 +3156,9 @@
   }
 
   setInterval(updateCountdown, 1000);
-  updateCountdown(); // initial call
+  updateCountdown();
 </script>
+
 
 </body>
 
