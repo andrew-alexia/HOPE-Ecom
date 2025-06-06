@@ -3294,6 +3294,47 @@
   setupDeliveryCountdown("delivery-msg", "delivery-timer"); // For Custom Binding
   setupDeliveryCountdown("delivery-msg-bulk", "delivery-timer-bulk"); // For Custom Bulk Printout
 </script>
+<script>
+  // INIT
+  const wishlistKey = 'wishlistItems';
+
+  function getWishlist() {
+    return JSON.parse(localStorage.getItem(wishlistKey)) || [];
+  }
+
+  function saveWishlist(items) {
+    localStorage.setItem(wishlistKey, JSON.stringify(items));
+  }
+
+  function updateWishlistCount() {
+    const count = getWishlist().length;
+    document.querySelector('.action-btn .count').textContent = count;
+  }
+
+  function addToWishlist(title) {
+    const items = getWishlist();
+    if (!items.includes(title)) {
+      items.push(title);
+      saveWishlist(items);
+      updateWishlistCount();
+    }
+  }
+
+  // EVENT BINDING
+  document.querySelectorAll('.wishlist-btn').forEach((btn) => {
+    btn.addEventListener('click', function () {
+      const product = this.closest('.showcase');
+      const title = product.querySelector('.showcase-title').innerText.trim();
+      addToWishlist(title);
+
+      // Change icon to filled heart
+      this.querySelector('ion-icon').setAttribute('name', 'heart');
+    });
+  });
+
+  // INIT COUNT ON LOAD
+  window.addEventListener('load', updateWishlistCount);
+</script>
 
 
 </body>
