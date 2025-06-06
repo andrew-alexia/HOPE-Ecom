@@ -2138,7 +2138,7 @@
 
           
               <!-- Second Showcase Container -->
-              <div class="showcase-container">
+<div class="showcase-container">
   <div class="showcase">
     <div class="showcase-banner">
       <img src="./assets/image/products/arduino-kit.jpg" alt="Custom Bulk Printout Service" class="showcase-img">
@@ -2149,8 +2149,8 @@
         <ion-icon name="star"></ion-icon>
         <ion-icon name="star"></ion-icon>
         <ion-icon name="star"></ion-icon>
-        <ion-icon name="star"></ion-icon>
-        <ion-icon name="star"></ion-icon>
+        <ion-icon name="star-outline"></ion-icon>
+        <ion-icon name="star-outline"></ion-icon>
       </div>
 
       <h3 class="showcase-title">
@@ -2166,7 +2166,7 @@
         <del>₹349.00</del>
       </div>
 
-      <button class="add-cart-btn">Upload Now</button>
+      <button class="add-cart-btn">Add to Cart</button>
 
       <div class="showcase-status">
         <div class="wrapper">
@@ -2177,12 +2177,13 @@
       </div>
 
       <div class="countdown-box">
-        <p class="countdown-desc" id="delivery-msg">Calculating delivery time...</p>
-        <p id="delivery-timer" style="font-weight: 500; color: #111;"></p>
+        <p class="countdown-desc" id="delivery-msg-2">Calculating delivery time...</p>
+        <p id="delivery-timer-2" style="font-weight: 500; color: #111;"></p>
       </div>
     </div>
   </div>
 </div>
+
 
           
             </div>
@@ -3179,6 +3180,40 @@
   updateDeliveryCountdown();
 </script>
 
+<script>
+  function updateDeliveryCountdown2() {
+    const now = new Date();
+    const slot = getNextSlot(now);
+    const target = new Date(now);
+    const [h, m] = slot.start.split(":").map(Number);
+    target.setDate(target.getDate() + slot.dayOffset);
+    target.setHours(h, m, 0, 0);
+
+    const diff = target - now;
+
+    if (diff <= 0) {
+      document.getElementById("delivery-msg-2").textContent = "Delivery window passed.";
+      document.getElementById("delivery-timer-2").textContent = "";
+      return;
+    }
+
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    const dayText = slot.dayOffset === 0 ? "Today" : "Tomorrow";
+
+    document.getElementById("delivery-msg-2").innerHTML =
+      `Order now and get delivery in: <b>${slot.name} (${dayText})</b>`;
+
+    document.getElementById("delivery-timer-2").innerHTML =
+      `Time left: <b>${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}</b><br>
+       Delivery starts at: <b>${formatTime(h, m)}</b>`;
+  }
+
+  setInterval(updateDeliveryCountdown2, 1000);
+  updateDeliveryCountdown2();
+</script>
 
 </body>
 
