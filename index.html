@@ -29,6 +29,18 @@
 
 <body>
 
+<div id="intro-tour" class="intro-step">
+  <div class="intro-message">
+    🛒 This is your cart! Tap here to view your selected items.
+  </div>
+
+  <label style="display: flex; align-items: center; font-size: 12px; margin-top: 8px;">
+    <input type="checkbox" id="dont-show-again" style="margin-right: 6px;">
+    Don't show again
+  </label>
+
+  <div class="intro-arrow"></div>
+</div>
 
   <div class="overlay" data-overlay></div>
 
@@ -3379,6 +3391,32 @@
   });
 </script>
 
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const intro = document.getElementById('intro-tour');
+    const cartBtn = document.querySelector('.action-btn[title="Cart"]');
+    const checkbox = document.getElementById('dont-show-again');
+
+    // Only show if checkbox was NOT selected before
+    if (localStorage.getItem('cartTourOptOut') !== 'true' && intro && cartBtn) {
+      const rect = cartBtn.getBoundingClientRect();
+      intro.style.top = rect.top + window.scrollY - 60 + 'px';
+      intro.style.left = rect.left + window.scrollX + 'px';
+
+      intro.classList.add('show');
+
+      // Auto-hide after 6 seconds
+      setTimeout(() => {
+        intro.classList.remove('show');
+
+        // Save opt-out only if checkbox is checked
+        if (checkbox.checked) {
+          localStorage.setItem('cartTourOptOut', 'true');
+        }
+      }, 6000);
+    }
+  });
+</script>
 
 
 </body>
