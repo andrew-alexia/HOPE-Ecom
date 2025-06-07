@@ -1464,14 +1464,14 @@
           
                 <!-- Showcase Item 1 -->
                  
-                <div class="showcase" onclick="openItemPage('Premium Pencil Set', './assets/image/products/premiumpencilset.png', '₹99.00', 'A high-quality pencil set ideal for students, artists, and professionals.')">
+                <div class="showcase" onclick="openItemForm('Premium Pencil Set')">
 
-  <a href="item.html" class="showcase-img-box">
+  <a href="#" class="showcase-img-box">
     <img src="./assets/image/products/premiumpencilset.png" alt="Premium Pencil Set" width="75" height="75" class="showcase-img">
   </a>
 
   <div class="showcase-content">
-    <a href="item.html">
+    <a href="#">
       <h4 class="showcase-title">Premium Pencil Set</h4>
     </a>
 
@@ -1488,22 +1488,18 @@
       <p class="price">₹99.00</p>
     </div>
   </div>
-
 </div>
 
-          <script>
-  function openItemPage(productName, image, price, description) {
+<script>
+  function openItemForm(productName) {
     const encodedName = encodeURIComponent(productName.trim());
+    const baseFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSc4iU7anOhLPNFkIKk6wO4Tlf0vfxw74yFBjtjLQy4p9E4Qew/viewform?usp=pp_url&entry.921725278=";
+    const fullURL = baseFormURL + encodedName;
 
-    const formLink = `https://docs.google.com/forms/d/e/1FAIpQLSc4iU7anOhLPNFkIKk6wO4Tlf0vfxw74yFBjtjLQy4p9E4Qew/viewform?usp=pp_url&entry.921725278=${encodedName}`;
-
-    // Option 1: Open the form in a new tab
-    window.open(formLink, "_blank");
-
-    // Option 2: Or set the link dynamically somewhere on the page
-    // document.getElementById("dynamicFormLink").href = formLink;
+    window.open(fullURL, "_blank");
   }
 </script>
+
 
                 <!-- Showcase Item 2 -->
                 <div class="showcase">
