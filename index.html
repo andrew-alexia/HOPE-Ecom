@@ -3296,46 +3296,62 @@
   setupDeliveryCountdown("delivery-msg-bulk", "delivery-timer-bulk"); // For Custom Bulk Printout
 </script>
 <script>
-  // INIT
-  const wishlistKey = 'wishlistItems';
+  document.addEventListener('DOMContentLoaded', function () {
+    const wishlistKey = 'wishlistItems';
 
-  function getWishlist() {
-    return JSON.parse(localStorage.getItem(wishlistKey)) || [];
-  }
-
-  function saveWishlist(items) {
-    localStorage.setItem(wishlistKey, JSON.stringify(items));
-  }
-
-  function updateWishlistCount() {
-    const count = getWishlist().length;
-    document.querySelector('.action-btn .count').textContent = count;
-  }
-
-  function addToWishlist(title) {
-    const items = getWishlist();
-    if (!items.includes(title)) {
-      items.push(title);
-      saveWishlist(items);
-      updateWishlistCount();
+    function getWishlist() {
+      return JSON.parse(localStorage.getItem(wishlistKey)) || [];
     }
-  }
 
-  // EVENT BINDING
-  document.querySelectorAll('.wishlist-btn').forEach((btn) => {
-    btn.addEventListener('click', function () {
-      const product = this.closest('.showcase');
-      const title = product.querySelector('.showcase-title').innerText.trim();
-      addToWishlist(title);
+    function saveWishlist(items) {
+      localStorage.setItem(wishlistKey, JSON.stringify(items));
+    }
 
-      // Change icon to filled heart
-      this.querySelector('ion-icon').setAttribute('name', 'heart');
+    function updateWishlistCount() {
+      const count = getWishlist().length;
+      const counter = document.querySelector('.action-btn .count');
+      if (counter) counter.textContent = count;
+    }
+
+    function addToWishlist(title, icon) {
+      const items = getWishlist();
+      if (!items.includes(title)) {
+        items.push(title);
+        saveWishlist(items);
+        updateWishlistCount();
+
+        // Visual feedback
+        if (icon) icon.setAttribute('name', 'heart');
+      }
+    }
+
+    document.querySelectorAll('.wishlist-btn').forEach((btn) => {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const product = this.closest('.showcase');
+        const title = product.querySelector('.showcase-title')?.innerText.trim();
+
+        const icon = this.querySelector('ion-icon');
+        addToWishlist(title, icon);
+      });
+
+      // Also catch icon click directly (mobile tap fix)
+      const icon = btn.querySelector('ion-icon');
+      if (icon) {
+        icon.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          btn.click(); // Trigger parent button
+        });
+      }
     });
-  });
 
-  // INIT COUNT ON LOAD
-  window.addEventListener('load', updateWishlistCount);
+    updateWishlistCount();
+  });
 </script>
+
 
 
 </body>
