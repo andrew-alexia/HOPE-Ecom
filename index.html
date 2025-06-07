@@ -1491,7 +1491,20 @@
 
 </div>
 
-          
+          <script>
+  function openItemPage(productName, image, price, description) {
+    const encodedName = encodeURIComponent(productName.trim());
+
+    const formLink = `https://docs.google.com/forms/d/e/1FAIpQLSc4iU7anOhLPNFkIKk6wO4Tlf0vfxw74yFBjtjLQy4p9E4Qew/viewform?usp=pp_url&entry.921725278=${encodedName}`;
+
+    // Option 1: Open the form in a new tab
+    window.open(formLink, "_blank");
+
+    // Option 2: Or set the link dynamically somewhere on the page
+    // document.getElementById("dynamicFormLink").href = formLink;
+  }
+</script>
+
                 <!-- Showcase Item 2 -->
                 <div class="showcase">
           
