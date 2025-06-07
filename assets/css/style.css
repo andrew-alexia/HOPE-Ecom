@@ -2699,3 +2699,30 @@ footer {
   }
 
 }
+.showcase-status-bar {
+  height: 8px;
+  width: 0;
+  background-color: #00c896;
+  border-radius: 10px;
+  transition: width 0.5s ease-in-out;
+}
+.tap-guide {
+  position: fixed;
+  z-index: 9999;
+  background: #000;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 13px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.tap-guide.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
