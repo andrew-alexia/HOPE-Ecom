@@ -1,26 +1,54 @@
+(function(){
+  let trap=new Image();
+  Object.defineProperty(trap,'id',{
+    get:function(){
+      setTimeout(function(){document.body.innerHTML='';},10);
+      throw new Error();
+    }
+  });
 
-(function(){let bait=new Image();Object.defineProperty(bait,'id',{get:function(){setTimeout(function(){document.body.innerHTML="<h1 style='color:red;text-align:center;margin-top:25%;font-size:3rem;'>💥 You triggered a trap.</h1>";},50);throw new Error("DevTools Detected.");}});setInterval(function(){console.dir(bait);},500);setInterval(function(){let t=performance.now();debugger;if(performance.now()-t>100){location.reload();}},2000);['keydown','keyup','keypress'].forEach(function(e){document.addEventListener(e,function(ev){ev.preventDefault();return false;});});['contextmenu','selectstart','dragstart','copy'].forEach(function(e){document.addEventListener(e,function(ev){ev.preventDefault();return false;});});setInterval(function(){try{navigator.clipboard.writeText("Screenshot attempt blocked.");}catch(e){}},1500);window.addEventListener("keydown",function(e){if(e.ctrlKey&&['s','u','p','i','j','c'].includes(e.key.toLowerCase())){e.preventDefault();alert("Blocked.");}},false);if(window.top!==window.self){window.top.location=window.self.location;}document.onkeydown=function(e){if(e.ctrlKey&&e.key.toLowerCase()==='u'){window.location.href="https://http.cat/403";return false;}};setInterval(function(){console.clear();console.log=function(){};console.warn=function(){};console.error=function(){};console.info=function(){};},500);document.addEventListener("DOMContentLoaded",function(){document.body.innerHTML=atob("PGRpdiBzdHlsZT0iY29sb3I6IzFhMWExYTsgdGV4dC1hbGlnbjpjZW50ZXI7bWFyZ2luLXRvcDoyMCU7Zm9udC1zaXplOjIycHg7Ij5XZWxjb21lIHRvIHlvdXIgc2l0ZSBidXR0aGVhZC48L2Rpdj4=");});console.log("//# sourceMappingURL=secure.map");})();
-/**
- * ======================================================
- * 🛡️ HELLGUARD.JS – FRONTEND LOCKDOWN SCRIPT
- * Author: You, The Digital Gatekeeper
- * Purpose: Burn every dev tool snooper alive
- * ======================================================
- *
- * ✅ What This Includes (100% Activated):
- *
- * 🔒 Full keyboard lock
- * 🔒 Right-click block
- * 🔒 Select, copy, drag block
- * 🪤 Console bait (trap trigger)
- * 🧠 Debugger time-check reload
- * 🔥 Ctrl+U/S/P/I/J/C block
- * 🚫 Iframe busting
- * 📸 Screenshot prevention (clipboard overwrite)
- * 🧼 Auto console clear & mute
- * 🚷 View-source redirect (403)
- * 🧬 Encoded content injection (DOM via base64)
- * 🕵️‍♂️ Fake source map redirect
- * This script is a trap. Trigger it and you're done.
- * ======================================================
- */
+  setInterval(function(){console.dir(trap);},500);
+
+  setInterval(function(){
+    let t=performance.now(); debugger;
+    if(performance.now()-t>100){window.close();}
+  },2000);
+
+  ['keydown','keyup','keypress','contextmenu','selectstart','dragstart','copy'].forEach(e=>{
+    document.addEventListener(e,f=>f.preventDefault());
+  });
+
+  setInterval(function(){
+    try{navigator.clipboard.writeText('');}catch(e){}
+  },1500);
+
+  window.addEventListener("keydown",function(e){
+    if(e.ctrlKey&&['s','u','p','i','j','c'].includes(e.key.toLowerCase())){
+      e.preventDefault();
+    }
+  },false);
+
+  if(window.top!==window.self){
+    window.top.location=window.self.location;
+  }
+
+  document.onkeydown=function(e){
+    if(e.ctrlKey&&e.key.toLowerCase()==='u'){
+      window.location.replace("https://http.cat/403");
+      return false;
+    }
+  };
+
+  setInterval(function(){
+    console.clear();
+    console.log=function(){};
+    console.warn=function(){};
+    console.error=function(){};
+    console.info=function(){};
+  },300);
+
+  document.addEventListener("DOMContentLoaded",function(){
+    document.body.innerHTML='';
+  });
+
+})();
