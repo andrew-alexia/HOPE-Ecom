@@ -6,6 +6,60 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shoproyince</title>
+<script>
+(function () {
+  // Block Right Click
+  document.addEventListener('contextmenu', e => e.preventDefault());
+
+  // Block Key Shortcuts
+  document.addEventListener('keydown', function (e) {
+    if (
+      e.ctrlKey && ['s', 'u', 'c', 'v'].includes(e.key.toLowerCase()) ||
+      e.key === 'F12' ||
+      (e.ctrlKey && e.shiftKey && ['i', 'j'].includes(e.key.toLowerCase()))
+    ) {
+      e.preventDefault();
+      return false;
+    }
+  });
+
+  // Disable Selection, Copy, Drag
+  ['selectstart', 'copy', 'dragstart'].forEach(evt =>
+    document.addEventListener(evt, e => e.preventDefault())
+  );
+
+  // DevTools Detection (Console bait)
+  let bait = new Image();
+  Object.defineProperty(bait, 'id', {
+    get: function () {
+      setTimeout(() => {
+        document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:20%;font-size:3rem;">💥 DevTools Blocked</h1>';
+      }, 50);
+      throw new Error('DevTools Detected');
+    }
+  });
+  setInterval(() => {
+    console.dir(bait);
+  }, 500);
+
+  // Performance-based detection
+  setInterval(() => {
+    const before = performance.now();
+    debugger;
+    const after = performance.now();
+    if (after - before > 100) {
+      location.reload(); // or redirect to another page
+    }
+  }, 1500);
+
+  // Clipboard overwrite
+  setInterval(() => {
+    try {
+      navigator.clipboard.writeText('Access Denied: This content is protected.');
+    } catch (e) {}
+  }, 1000);
+})();
+</script>
 
   <!--
     - favicon
