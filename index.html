@@ -102,11 +102,11 @@
       <ion-icon name="close-outline"></ion-icon>
     </button>
     <div class="toast-banner">
-      <img src="./assets/image/products/premiumbook.png" alt="Premium Notebook" width="80" height="70">
+      <img src="./assets/image/products/custom-printing.png" alt="Custom Printed Assignment" width="80" height="70">
     </div>
     <div class="toast-detail">
-      <p class="toast-message">Someone in New Delhi just bought</p>
-      <p class="toast-title">Premium Notebook</p>
+      <p class="toast-message">A student in DS just ordered</p>
+      <p class="toast-title">Custom Printed Assignment</p>
       <p class="toast-meta"><time datetime="PT2M">2 Minutes</time> ago</p>
     </div>
   </div>
@@ -117,11 +117,11 @@
       <ion-icon name="close-outline"></ion-icon>
     </button>
     <div class="toast-banner">
-      <img src="./assets/image/products/arduinostarterkit.png" alt="Arduino Starter Kit" width="80" height="70">
+      <img src="./assets/image/products/earphones.png" alt="Noise-Canceling Earphones" width="80" height="70">
     </div>
     <div class="toast-detail">
-      <p class="toast-message">Someone in Mumbai just bought</p>
-      <p class="toast-title">Arduino Starter Kit</p>
+      <p class="toast-message">Someone in ECE just bought</p>
+      <p class="toast-title">Wireless Earphones</p>
       <p class="toast-meta"><time datetime="PT5M">5 Minutes</time> ago</p>
     </div>
   </div>
@@ -132,12 +132,12 @@
       <ion-icon name="close-outline"></ion-icon>
     </button>
     <div class="toast-banner">
-      <img src="./assets/image/products/Shoproyincebrandedhoodie.png" alt="Shoproyince Branded Hoodie" width="80" height="70">
+      <img src="./assets/image/products/sanitary-pads.png" alt="Sanitary Pads Pack" width="80" height="70">
     </div>
     <div class="toast-detail">
-      <p class="toast-message">Someone in Bangalore just bought</p>
-      <p class="toast-title">Shoproyince Branded Hoodie</p>
-      <p class="toast-meta"><time datetime="PT10M">10 Minutes</time> ago</p>
+      <p class="toast-message">A student in CSE just ordered</p>
+      <p class="toast-title">Sanitary Pads Pack</p>
+      <p class="toast-meta"><time datetime="PT9M">9 Minutes</time> ago</p>
     </div>
   </div>
 
@@ -147,53 +147,88 @@
       <ion-icon name="close-outline"></ion-icon>
     </button>
     <div class="toast-banner">
-      <img src="./assets/image/products/labcoat.png" alt="Lab Coat" width="80" height="70">
+      <img src="./assets/image/products/notebook-pack.png" alt="Premium Notebook Set" width="80" height="70">
     </div>
     <div class="toast-detail">
-      <p class="toast-message">Someone in Hyderabad just bought</p>
-      <p class="toast-title">Lab Coat</p>
-      <p class="toast-meta"><time datetime="PT15M">15 Minutes</time> ago</p>
+      <p class="toast-message">Someone in R&AI just bought</p>
+      <p class="toast-title">Notebook & File Combo</p>
+      <p class="toast-meta"><time datetime="PT12M">12 Minutes</time> ago</p>
+    </div>
+  </div>
+
+  <!-- Notification Toast 5 -->
+  <div class="notification-toast" data-toast>
+    <button class="toast-close-btn" data-toast-close>
+      <ion-icon name="close-outline"></ion-icon>
+    </button>
+    <div class="toast-banner">
+      <img src="./assets/image/products/usb-charger.png" alt="Fast Charging USB Cable" width="80" height="70">
+    </div>
+    <div class="toast-detail">
+      <p class="toast-message">A student in Civil just ordered</p>
+      <p class="toast-title">USB Type-C Charger</p>
+      <p class="toast-meta"><time datetime="PT14M">14 Minutes</time> ago</p>
     </div>
   </div>
 
 </div>
 <script>
   const toasts = document.querySelectorAll('.notification-toast');
-  const showcases = document.querySelectorAll('.showcase');
+  let currentIndex = 0;
 
-  function isInViewport(el) {
-    const rect = el.getBoundingClientRect();
-    return rect.top < window.innerHeight && rect.bottom > 0;
-  }
+  // Initially hide all toasts
+  toasts.forEach(toast => {
+    toast.style.display = 'none';
+  });
 
-  function updateToasts() {
-    let toastShown = false;
+  // Function to show next toast
+  function showNextToast() {
+    if (currentIndex < toasts.length) {
+      // Hide all
+      toasts.forEach(toast => {
+        toast.style.display = 'none';
+      });
 
-    showcases.forEach((section, index) => {
-      if (!toastShown && isInViewport(section)) {
-        toasts.forEach(toast => toast.style.display = 'none');
-        if (toasts[index]) {
-          toasts[index].style.display = 'flex'; // or block if your layout prefers
-          toastShown = true;
-        }
-      }
-    });
+      // Show current
+      toasts[currentIndex].style.display = 'flex';
 
-    if (!toastShown) {
-      toasts.forEach(toast => toast.style.display = 'none');
+      currentIndex++;
+    } else {
+      // Optional: Restart from beginning
+      currentIndex = 0;
     }
   }
 
-  // Attach scroll and load events
-  window.addEventListener('scroll', updateToasts);
-  window.addEventListener('load', updateToasts);
+  // Show first toast immediately
+  showNextToast();
 
-  // Close button logic stays
+  // Set interval for delay between toasts (e.g., every 3 seconds)
+  const toastInterval = setInterval(showNextToast, 3000); // Change 3000 to adjust delay in ms
+
+  // Close button logic
   document.querySelectorAll('[data-toast-close]').forEach(button => {
     button.addEventListener('click', () => {
-      button.closest('.notification-toast').style.display = 'none';
+      const toast = button.closest('.notification-toast');
+      toast.style.display = 'none';
     });
   });
+document.querySelector('.notification-container').addEventListener('mouseenter', () => {
+  clearInterval(toastInterval);
+});
+
+document.querySelector('.notification-container').addEventListener('mouseleave', () => {
+  toastInterval = setInterval(showNextToast, 3000);
+});
+function showRandomToast() {
+  // Hide all
+  toasts.forEach(toast => toast.style.display = 'none');
+
+  // Pick random index
+  const randomIndex = Math.floor(Math.random() * toasts.length);
+
+  // Show random
+  toasts[randomIndex].style.display = 'flex';
+}
 </script>
 
 
