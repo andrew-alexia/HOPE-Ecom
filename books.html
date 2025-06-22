@@ -3667,33 +3667,9 @@ Perfect for students preparing for GATE, JEE, university exams, or daily coursew
     updateWishlistCount();
   });
 </script>
-<div id="cart-guide" class="tap-guide">
-  🛒 Tap here to view your cart!
-</div>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const guide = document.getElementById('cart-guide');
-    const cartBtn = document.querySelector('.action-btn[title="Cart"]');
-
-    if (!localStorage.getItem('cartGuideShown') && guide && cartBtn) {
-      // Get position
-      const rect = cartBtn.getBoundingClientRect();
-      guide.style.top = rect.top + window.scrollY - 45 + 'px';
-      guide.style.left = rect.left + window.scrollX + 'px';
-
-      // Show tooltip
-      guide.classList.add('show');
-
-      // Hide after 5 sec
-      setTimeout(() => {
-        guide.classList.remove('show');
-      }, 5000);
-
-      // Prevent future displays
-      localStorage.setItem('cartGuideShown', 'true');
-    }
-  });
-</script>
+ <!--
+    - jusss somthinggg
+  -->
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
