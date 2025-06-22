@@ -1554,13 +1554,13 @@ function showRandomToast() {
 </div>
 
           
-<!-- Showcase Item 3 -->
+<!-- Showcase Item with price -->
 <div class="showcase" onclick="openItemForm(
   'Geometry Box',
-  'Essential engineering compass set for accurate technical drawings, includes compass, ruler, divider, and more.'
+  'Essential engineering compass set for accurate technical drawings, includes compass, ruler, divider, and more.',
+  '69'
 )">
-
-  <a href="#" class="showcase-img-box">
+  <a href="#" class="showcase-img-box">    
     <img src="./assets/image/products/engineeringcompassset.png" alt="geometry box" class="showcase-img" width="75" height="75">
   </a>
 
@@ -3760,13 +3760,20 @@ Perfect for students preparing for GATE, JEE, university exams, or daily coursew
     }
   });
 </script>
-<script> //main js for the product side
-  function openItemForm(productName, productDetails) {
+<script>
+  function openItemForm(productName, productDetails, price) {
     const nameParam = encodeURIComponent(productName.trim());
     const detailsParam = encodeURIComponent(productDetails.trim());
+    const priceParam = encodeURIComponent(`Product Price: ${price}rs`);
 
-    const baseFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSc4iU7anOhLPNFkIKk6wO4Tlf0vfxw74yFBjtjLQy4p9E4Qew/viewform?usp=pp_url";
-    const fullURL = `${baseFormURL}&entry.921725278=${nameParam}&entry.1280601067=${detailsParam}`;
+    // Platform fee and delivery fee
+    const platformFee = 1;
+    const deliveryFee = 3;
+    const totalPrice = parseInt(price) + platformFee + deliveryFee;
+
+    const baseFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSdpYXdZct4F1HSEbFdg9vXxoQQeLMSjSGiXg04dGOUjz6s2Ag/viewform?usp=pp_url";
+    
+    const fullURL = `${baseFormURL}&entry.697124822=${nameParam}&entry.500354513=${detailsParam}&entry.1602031545=${priceParam}%0APlatform+Fee+:+${platformFee}rs%0ADelivary+Fee+:+${deliveryFee}rs%0A-------------------------------%0ATotal+Amount+:+${totalPrice}rs`;
 
     window.open(fullURL, "_blank");
   }
