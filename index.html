@@ -304,6 +304,40 @@ function showRandomToast() {
       </div>
     
     </div>
+<!-- Modal -->
+<div class="modal" data-modal id="appModal">
+  <div class="modal-close-overlay" data-modal-overlay></div>
+
+  <div class="modal-content">
+    <!-- Close Button -->
+    <button class="modal-close-btn" data-modal-close>
+      <ion-icon name="close-outline"></ion-icon>
+    </button>
+
+    <!-- App Image -->
+    <div class="newsletter-img">
+      <img src="./assets/image/app-preview.png" alt="Download the Shoproyince E-Commerce App" width="400" height="400">
+    </div>
+
+    <!-- App Newsletter Form -->
+    <div class="newsletter">
+      <form action="#">
+        <div class="newsletter-header">
+          <h3 class="newsletter-title">Get the Shoproyince App Today!</h3>
+          <p class="newsletter-desc">
+            Fast delivery. Essential items. No more last-minute stress. The Shoproyince E-Commerce app brings everything you need right to your doorstep — whether it's custom printing, stationery, electronics, or hygiene essentials.
+          </p>
+        </div>
+
+        <!-- Email Input -->
+        <input type="email" name="email" class="email-field" placeholder="Enter Your Email Address" required>
+
+        <!-- Subscribe Button -->
+        <button type="submit" class="btn-newsletter">Join the Shoproyince Movement</button>
+      </form>
+    </div>
+  </div>
+</div>
 
     <div class="header-main">
 
@@ -341,16 +375,38 @@ function showRandomToast() {
           </button>
     
           <!-- Cart Button -->
-          <button class="action-btn" title="Cart">
-            <ion-icon name="download-outline"></ion-icon>
-          </button>
+          
+<!-- Trigger Button -->
+<button class="action-btn" title="Cart" id="openModalBtn">
+  <ion-icon name="download-outline"></ion-icon>
+</button>
     
         </div>
     
       </div>
     
     </div>
+<script>
+  const modal = document.getElementById("appModal");
+  const openModalBtn = document.getElementById("openModalBtn");
+  const closeModalBtn = modal.querySelector('[data-modal-close]');
+  const overlay = modal.querySelector('[data-modal-overlay]');
 
+  //open the popup when tapped
+  openModalBtn.addEventListener('click', () => {
+    modal.classList.add('active');
+  });
+
+  // Close modal on close button
+  closeModalBtn.addEventListener('click', () => {
+    modal.classList.remove('active');
+  });
+
+  // Close modal on overlay click
+  overlay.addEventListener('click', () => {
+    modal.classList.remove('active');
+  });
+</script>
     <nav class="desktop-navigation-menu">
 
       <div class="container">
